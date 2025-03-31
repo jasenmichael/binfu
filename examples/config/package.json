@@ -1,0 +1,17 @@
+{
+  "name": "port-claim",
+  "version": "3.0.0",
+  "description": "If a port is in use, port-claim stops the process using it.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jasenmichael/port-claim"
+  },
+  "scripts": {
+    "port-claim": "binfu",
+    "preinstall": "cd .. && pnpm build",
+    "postinstall": "binfu update"
+  },
+  "dependencies": {
+    "binfu": "file:../.."
+  }
+}
