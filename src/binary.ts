@@ -23,12 +23,12 @@ export type ConfigBase = {
   /**
    * The url of the binary
    */
-  url: string;
+  url?: string;
   /**
    * The name of the binary downloaded
    *
    */
-  name: string;
+  name?: string;
   /**
    * Installation path for the binary. Defaults to:
    * - ./node_modules/.bin if package.json exists
@@ -59,7 +59,7 @@ export type ConfigBase = {
    * Set to false to disable the .exe extension for windows platforms
    */
   winExe?: boolean;
-};
+} | undefined;
 
 export type ConfigPlatformOverrides = {
   [key in Platform]?: ConfigBase;
@@ -82,28 +82,28 @@ export default class Binary {
   pkgRepo: string;
   rename?: string;
 
-  constructor(config: Config) {
+  constructor(config: Config = {}) {
     if (config.winExe !== false && PLATFORM.includes("win")) {
       config.extension = ".exe";
     }
 
-    if (config.platformOverrides?.[PLATFORM]) {
+    if (config?.platformOverrides?.[PLATFORM]) {
       config = {
         ...config,
         ...config.platformOverrides[PLATFORM],
       };
     }
 
-    this.url = config.url
+    this.url = config?.url
       ? config.url
           .replace("{{repo}}", PKG_REPO)
           .replace("{{name}}", PKG_NAME)
           .replace("{{platform}}", PLATFORM)
           .replace("{{arch}}", ARCH)
           .replace("{{version}}", PKG_VERSION)
-      : defaultUrl(config.name);
+      : defaultUrl(config?.name);
 
-    this.name = config.name ? config.name + (config.extension || "") : PKG_NAME;
+    this.name = config?.name ? config.name + (config?.extension || "") : PKG_NAME;
 
     if (!this.name) {
       throw new Error("name is required");
@@ -112,7 +112,7 @@ export default class Binary {
       throw new Error("url is required");
     }
 
-    if (config.rename)
+    if (config?.rename)
       this.rename = config.rename;
 
     this.platform = PLATFORM;

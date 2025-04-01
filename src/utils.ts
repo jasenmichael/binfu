@@ -36,7 +36,7 @@ export function defaultInstallDirectory() {
   return IS_PKG ? join(process.cwd(), "node_modules", ".bin") : process.cwd();
 }
 
-export function defaultUrl(name: string) {
+export function defaultUrl(name: string | undefined): string {
   return `${PKG_REPO}/releases/download/v${PKG_VERSION}/${
     name || PKG_NAME
   }-${PLATFORM}-${ARCH}.tar.gz`;
